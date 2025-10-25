@@ -13,7 +13,9 @@
 --color-dark: #151515;
 --color-light: #52525b;
 --color-light-orange: #fca99b;
---color-shop_light_green: #3b9c3c 
+--color-shop_light_green: #3b9c3c;
+--color-lightColor: #52525b;
+--color-darkColor: #151515;
 
 }
 
@@ -139,6 +141,9 @@
   .hoverEffect {
     @apply transition-all duration-300 ease-in-out;
 
+  }
+  button{
+    @apply hover:cursor-pointer;
   }
 }
 
