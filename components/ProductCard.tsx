@@ -12,7 +12,7 @@ import AddToCartButton from "./AddToCartButton";
 
 const ProductCard = ({ product }: { product: Product }) => {
   return (
-    <div className="text-sm border rounded-md border-darkBlue/20 group bg-white">
+    <div className="text-sm border1 rounded-md border-darkBlue/20 group bg-white">
       <div className="relative group overflow-hidden bg-shop-light-bg">
         {product?.images && (
           <Link href={`/product/${product?.slug?.current}`}>
@@ -22,15 +22,12 @@ const ProductCard = ({ product }: { product: Product }) => {
               width={500}
               height={500}
               priority
-              className={`w-full h-64 object-contain overflow-hidden transition-transform bg-shop-light-grey duration-500 
+              className={`w-full h-64 object-contain overflow-hidden transition-transform bg-shop-light-bg duration-500 
               ${product?.stock !== 0 ? "group-hover:scale-105" : "opacity-50"}`}
             />
           </Link>
         )}
-        {(() => {
-          const ProductSideMenuTyped = ProductSideMenu as React.ComponentType<{ product: Product }>;
-          return <ProductSideMenuTyped product={product} />;
-        })()}
+        <ProductSideMenu product={product} />
         {product?.status === "sale" ? (
           <p className="absolute top-2 left-2 z-10 text-xs border border-darkColor/50 px-2 rounded-full group-hover:border-lightGreen hover:text-shop-dark-green hoverEffect">
             Sale!
@@ -50,7 +47,7 @@ const ProductCard = ({ product }: { product: Product }) => {
       </div>
       <div className="p-3 flex flex-col gap-2">
         {product?.categories && (
-          <p className="uppercase line-clamp-1 text-xs font-medium text-light">
+          <p className="uppercase line-clamp-1 text-xs font-medium text-lightText">
             {product.categories.map((cat) => cat).join(", ")}
           </p>
         )}
@@ -61,13 +58,13 @@ const ProductCard = ({ product }: { product: Product }) => {
               <StarIcon
                 key={index}
                 className={
-                  index < 4 ? "text-shop-light-green" : " text-light"
+                  index < 4 ? "text-shop-light-green" : " text-lightText"
                 }
                 fill={index < 4 ? "#93D991" : "#ababab"}
               />
             ))}
           </div>
-          <p className="text-light text-xs tracking-wide">5 Reviews</p>
+          <p className="text-lightText text-xs tracking-wide">5 Reviews</p>
         </div>
 
         <div className="flex items-center gap-2.5">

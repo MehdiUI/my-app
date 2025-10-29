@@ -16,10 +16,10 @@ const HomeTabBar = ({ selectedTab, onTabSelect }: Props) => {
             <button
               onClick={() => onTabSelect(item?.title)}
               key={item?.title}
-              className={`border border-shop_light_green/30 px-4 py-1.5 md:px-6 md:py-2 rounded-full
-                 hover:bg-shop_light_green hover:border-shop_light_green hover:text-white hoverEffect 
-                 ${selectedTab === item?.title ? "bg-shop_light_green text-white border-shop_light_green" : 
-                  "bg-shop_light_green/10"}`}
+              className={`border border-shop-light-green/30 px-4 py-1.5 md:px-6 md:py-2 rounded-full
+                 hover:bg-shop-light-green hover:border-shop-light-green hover:text-white hoverEffect
+                 ${selectedTab === item?.title ? "bg-shop-light-green text-white border-shop-light-green" :
+                  "bg-shop-light-green/10"}`}
             >
               {item?.title}
             </button>
@@ -28,8 +28,8 @@ const HomeTabBar = ({ selectedTab, onTabSelect }: Props) => {
       </div>
       <Link
         href={"/shop"}
-        className="border border-darkColor px-4 py-1 rounded-full hover:bg-shop_light_green
-         hover:text-white hover:border-shop_light_green hoverEffect"
+        className="border border-darkColor px-4 py-1 rounded-full hover:bg-shop-light-green
+         hover:text-white hover:border-shop-light-green hoverEffect"
       >
         See all
       </Link>
