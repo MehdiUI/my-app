@@ -6,4 +6,6 @@ import { client } from './client'
 
 export const { sanityFetch, SanityLive } = defineLive({
   client,
+  serverToken: false, // Désactive l'avertissement - seul le contenu publié sera récupéré
+  browserToken: false, // Désactive l'avertissement - pas de preview de drafts standalone
 });
