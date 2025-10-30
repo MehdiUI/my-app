@@ -29,7 +29,7 @@ const Shop = ({ categories, brands }: Props) => {
     brandParams || null
   );
   const [selectedPrice, setSelectedPrice] = useState<string | null>(null);
-  const fetchProducts = async () => {
+  const fetchProducts = React.useCallback(async () => {
     setLoading(true);
     try {
       let minPrice = 0;
@@ -60,11 +60,11 @@ const Shop = ({ categories, brands }: Props) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedCategory, selectedBrand, selectedPrice]);
 
   useEffect(() => {
     fetchProducts();
-  }, [selectedCategory, selectedBrand, selectedPrice]);
+  }, [fetchProducts]);
   return (
     <div className="border-t">
       <Container className="mt-5">
@@ -82,15 +82,15 @@ const Shop = ({ categories, brands }: Props) => {
                   setSelectedBrand(null);
                   setSelectedPrice(null);
                 }}
-                className="text-shop_dark_green underline text-sm mt-2 font-medium hover:text-darkRed hoverEffect"
+                className="text-shop-dark-green underline text-sm mt-2 font-medium hover:text-darkRed hoverEffect"
               >
                 Reset Filters
               </button>
             )}
           </div>
         </div>
-        <div className="flex flex-col md:flex-row gap-5 border-t border-t-shop_dark_green/50">
-          <div className="md:sticky md:top-20 md:self-start md:h-[calc(100vh-160px)] md:overflow-y-auto md:min-w-64 pb-5 md:border-r border-r-shop_btn_dark_green/50 scrollbar-hide">
+        <div className="flex flex-col md:flex-row gap-5 border-t border-t-shop-dark-green/50">
+          <div className="md:sticky md:top-20 md:self-start md:h-[calc(100vh-160px)] md:overflow-y-auto md:min-w-64 pb-5 md:border-r border-r-shop-dark-green/50 scrollbar-hide">
             <CategoryList
               categories={categories}
               selectedCategory={selectedCategory}
@@ -110,7 +110,7 @@ const Shop = ({ categories, brands }: Props) => {
             <div className="h-[calc(100vh-160px)] overflow-y-auto pr-2 scrollbar-hide">
               {loading ? (
                 <div className="p-20 flex flex-col gap-2 items-center justify-center bg-white">
-                  <Loader2 className="w-10 h-10 text-shop_dark_green animate-spin" />
+                  <Loader2 className="w-10 h-10 text-shop-dark-green animate-spin" />
                   <p className="font-semibold tracking-wide text-base">
                     Product is loading . . .
                   </p>

@@ -31,8 +31,10 @@ const HomeCategories = ({ categories }: { categories: Category[] }) => {
             <div className="space-y-1">
               <h3 className="text-base font-semibold">{category?.title}</h3>
               <p className="text-sm">
-                <span className="font-bold text-shop-dark-green">{`(${category?.productCount})`}</span>{" "}
-                items Available
+                {/* Utilisez une propriété existante ou supprimez cette ligne */}
+                <span className="font-bold text-shop-dark-green">
+                  {category?.range ? `Range: ${category.range}` : "Available"}
+                </span>
               </p>
             </div>
           </div>

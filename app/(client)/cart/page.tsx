@@ -232,7 +232,7 @@ const CartPage = () => {
                           />
                         </div>
                         <Button
-                          className="w-full rounded-full font-semibold tracking-wide hoverEffect"
+                          className="w-full rounded-full font-semibold tracking-wide hoverEffect bg-shop-btn-dark-green"
                           size="lg"
                           disabled={loading}
                           onClick={handleCheckout}
@@ -310,7 +310,7 @@ const CartPage = () => {
                         />
                       </div>
                       <Button
-                        className="w-full rounded-full font-semibold tracking-wide hoverEffect"
+                        className="w-full rounded-full font-semibold tracking-wide hoverEffect bg-shop-btn-dark-green"
                         size="lg"
                         disabled={loading}
                         onClick={handleCheckout}
