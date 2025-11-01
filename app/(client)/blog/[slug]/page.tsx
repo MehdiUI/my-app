@@ -20,7 +20,8 @@ const SingleBlogPage = async ({
   params: Promise<{ slug: string }>;
 }) => {
   const { slug } = await params;
-  const blog = await getSingleBlog(slug);
+  const blogResult = await getSingleBlog(slug);
+  const blog = Array.isArray(blogResult) ? blogResult[0] : blogResult;
   
   if (!blog) return notFound();
 

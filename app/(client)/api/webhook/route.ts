@@ -64,22 +64,39 @@ async function createOrderInSanity(
   session: Stripe.Checkout.Session,
   invoice: Stripe.Invoice | null
 ) {
+  console.error("\n=== CREATING ORDER IN SANITY ===");
+  console.error("Session ID:", session.id);
+  console.error("Metadata:", session.metadata);
+  
   const {
     id,
     amount_total,
     currency,
     metadata,
     payment_intent,
+    customer,
     total_details,
   } = session;
+
+  // Vérifier les métadonnées
+  if (!metadata || !metadata.orderNumber) {
+    console.error("❌ Missing metadata! Session metadata:", metadata);
+    throw new Error("Missing required metadata in checkout session");
+  }
+
   const { orderNumber, customerName, customerEmail, clerkUserId, address } =
     metadata as unknown as Metadata & { address: string };
+  
+  console.error("Order details:", { orderNumber, customerName, customerEmail });
+  
   const parsedAddress = address ? JSON.parse(address) : null;
 
   const lineItemsWithProduct = await stripe.checkout.sessions.listLineItems(
     id,
     { expand: ["data.price.product"] }
   );
+
+  console.error("Line items count:", lineItemsWithProduct.data.length);
 
   // Create Sanity product references and prepare stock updates
   const sanityProducts = [];
@@ -88,7 +105,12 @@ async function createOrderInSanity(
     const productId = (item.price?.product as Stripe.Product)?.metadata?.id;
     const quantity = item?.quantity || 0;
 
-    if (!productId) continue;
+    console.error("Processing product:", { productId, quantity });
+
+    if (!productId) {
+      console.error("⚠️ Skipping item without product ID");
+      continue;
+    }
 
     sanityProducts.push({
       _key: crypto.randomUUID(),
@@ -100,22 +122,22 @@ async function createOrderInSanity(
     });
     stockUpdates.push({ productId, quantity });
   }
-  //   Create order in Sanity
+
+  console.error("Creating order with", sanityProducts.length, "products");
 
   const order = await backendClient.create({
     _type: "order",
     orderNumber,
     stripeCheckoutSessionId: id,
-    stripePaymentIntentId: payment_intent,
+    stripePaymentIntentId: payment_intent as string,
     customerName,
-    stripeCustomerId: customerEmail,
+    stripeCustomerId: customer as string,
     clerkUserId: clerkUserId,
     email: customerEmail,
     currency,
     amountDiscount: total_details?.amount_discount
       ? total_details.amount_discount / 100
       : 0,
-
     products: sanityProducts,
     totalPrice: amount_total ? amount_total / 100 : 0,
     status: "paid",
@@ -138,7 +160,7 @@ async function createOrderInSanity(
       : null,
   });
 
-  // Update stock levels in Sanity
+  console.error("✅ Order created successfully! ID:", order._id);
 
   await updateStockLevels(stockUpdates);
   return order;

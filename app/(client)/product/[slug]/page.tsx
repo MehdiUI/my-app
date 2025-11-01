@@ -39,7 +39,7 @@ const SingleProductPage = async ({
               <StarIcon
                 key={index}
                 size={12}
-                className="text-shop_light_green"
+                className="text-shop-light-green"
                 fill={"#3b9c3c"}
               />
             ))}
@@ -83,7 +83,7 @@ const SingleProductPage = async ({
         </div>
         <div className="flex flex-col">
           <div className="border border-lightColor/25 border-b-0 p-3 flex items-center gap-2.5">
-            <Truck size={30} className="text-shop_orange" />
+            <Truck size={30} className="text-shop-orange" />
             <div>
               <p className="text-base font-semibold text-black">
                 Free Delivery
@@ -94,7 +94,7 @@ const SingleProductPage = async ({
             </div>
           </div>
           <div className="border border-lightColor/25 p-3 flex items-center gap-2.5">
-            <CornerDownLeft size={30} className="text-shop_orange" />
+            <CornerDownLeft size={30} className="text-shop-orange" />
             <div>
               <p className="text-base font-semibold text-black">
                 Return Delivery

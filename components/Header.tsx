@@ -1,3 +1,4 @@
+
 import React from "react";
 import Container from "./Container";
 import Logo from "./Logo";
@@ -14,11 +15,21 @@ import { Logs } from "lucide-react";
 import { getMyOrders } from "@/sanity/queries";
 
 const Header = async () => {
-  const user = await currentUser();
-  const { userId } = await auth();
+  let user = null;
+  let userId = null;
   let orders = null;
-  if (userId) {
-    orders = await getMyOrders(userId);
+
+  try {
+    user = await currentUser();
+    const authResult = await auth();
+    userId = authResult.userId;
+    
+    if (userId) {
+      orders = await getMyOrders(userId);
+    }
+  } catch (error) {
+    console.error('Authentication error:', error);
+    // Continue with null values if auth fails
   }
 
   return (
@@ -37,10 +48,10 @@ const Header = async () => {
           {user && (
             <Link
               href={"/orders"}
-              className="group relative hover:text-shop-light-green hoverEffect"
+              className="group relative hover:text-shop_light_green hoverEffect"
             >
               <Logs />
-              <span className="absolute -top-1 -right-1 bg-shop-btn-dark-green text-white h-3.5 w-3.5 rounded-full text-xs font-semibold flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-shop_btn_dark_green text-white h-3.5 w-3.5 rounded-full text-xs font-semibold flex items-center justify-center">
                 {orders?.length ? orders?.length : 0}
               </span>
             </Link>

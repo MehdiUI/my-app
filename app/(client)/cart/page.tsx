@@ -232,7 +232,7 @@ const CartPage = () => {
                           />
                         </div>
                         <Button
-                          className="w-full rounded-full font-semibold tracking-wide hoverEffect bg-shop-btn-dark-green"
+                          className="w-full rounded-full font-semibold tracking-wide hoverEffect"
                           size="lg"
                           disabled={loading}
                           onClick={handleCheckout}
@@ -257,7 +257,7 @@ const CartPage = () => {
                                 <div
                                   key={address?._id}
                                   onClick={() => setSelectedAddress(address)}
-                                  className={`flex items-center space-x-2 mb-4 cursor-pointer ${selectedAddress?._id === address?._id && "text-shop_dark_green"}`}
+                                  className={`flex items-center space-x-2 mb-4 cursor-pointer ${selectedAddress?._id === address?._id && "text-shop-dark-green"}`}
                                 >
                                   <RadioGroupItem
                                     value={address?._id.toString()}
@@ -310,7 +310,7 @@ const CartPage = () => {
                         />
                       </div>
                       <Button
-                        className="w-full rounded-full font-semibold tracking-wide hoverEffect bg-shop-btn-dark-green"
+                        className="w-full rounded-full font-semibold tracking-wide hoverEffect"
                         size="lg"
                         disabled={loading}
                         onClick={handleCheckout}
