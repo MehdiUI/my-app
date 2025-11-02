@@ -5,8 +5,7 @@ import React from "react";
 import SearchBar from "./SearchBar";
 import CartIcon from "./CartIcon";
 import FavoriteButton from "./FavoriteButton";
-import SignIn from "./SignIn";
-import { ClerkLoaded, SignedIn, UserButton } from "@clerk/nextjs";
+import { ClerkLoaded, SignedIn, UserButton, SignInButton } from "@clerk/nextjs"; // Ajoutez SignInButton ici
 import Link from "next/link";
 import { Logs } from "lucide-react";
 
@@ -38,7 +37,13 @@ const HeaderClient = ({ ordersCount, hasUser }: HeaderClientProps) => {
         <SignedIn>
           <UserButton />
         </SignedIn>
-        {!hasUser && <SignIn />}
+        {!hasUser && (
+          <SignInButton mode="modal">
+            <button className="text-sm font-semibold hover:text-darkColor text-lightColor hover:cursor-pointer hoverEffect">
+              Login
+            </button>
+          </SignInButton>
+        )}
       </ClerkLoaded>
     </div>
   );
