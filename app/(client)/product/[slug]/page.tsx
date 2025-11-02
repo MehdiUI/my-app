@@ -13,6 +13,8 @@ import { FiShare2 } from "react-icons/fi";
 import { RxBorderSplit } from "react-icons/rx";
 import { TbTruckDelivery } from "react-icons/tb";
 
+export const dynamic = 'force-dynamic'
+
 const SingleProductPage = async ({
   params,
 }: {

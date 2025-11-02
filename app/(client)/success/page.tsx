@@ -7,6 +7,8 @@ import { motion } from "motion/react";
 import { Check, Home, Package, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 
+export const dynamic = 'force-dynamic'
+
 const SuccessPageContent = () => {
   const { resetCart } = useStore();
   const searchParams = useSearchParams();

@@ -7,7 +7,7 @@ import Stripe from "stripe";
 
 // IMPORTANT: Configuration pour Next.js 16
 export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic'
 
 interface OrderData {
   _type: string;

@@ -8,6 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
+export const dynamic = 'force-dynamic'
 const BlogPage = async () => {
   const blogs = await getAllBlogs(6);
 

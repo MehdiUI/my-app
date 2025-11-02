@@ -5,6 +5,8 @@ import { getDealProducts } from "@/sanity/queries";
 import { Product } from "@/sanity.types"; 
 import React from "react";
 
+export const dynamic = 'force-dynamic'
+
 const DealPage = async () => {
   const products: Product[] = await getDealProducts(); 
   return (

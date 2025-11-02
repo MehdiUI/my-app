@@ -4,6 +4,8 @@ import Title from "@/components/Title";
 import { getCategories } from "@/sanity/queries";
 import React from "react";
 
+
+export const dynamic = 'force-dynamic'
 const CategoryPage = async ({
   params,
 }: {
