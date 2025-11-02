@@ -5,6 +5,46 @@ import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
+// IMPORTANT: Configuration pour Next.js 16
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
+interface OrderData {
+  _type: string;
+  orderNumber: string;
+  stripeCheckoutSessionId: string;
+  stripePaymentIntentId: string;
+  customerName: string;
+  stripeCustomerId: string;
+  email: string;
+  currency: string;
+  amountDiscount: number;
+  products: Array<{
+    _key: string;
+    product: {
+      _type: string;
+      _ref: string;
+    };
+    quantity: number;
+  }>;
+  totalPrice: number;
+  status: string;
+  orderDate: string;
+  clerkUserId?: string;
+  invoice?: {
+    id: string;
+    number: string | null;
+    hosted_invoice_url: string | null;
+  };
+  address?: {
+    state: string;
+    zip: string;
+    city: string;
+    address: string;
+    name: string;
+  };
+}
+
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const headersList = await headers();
@@ -16,25 +56,21 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
+
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
   if (!webhookSecret) {
-    console.log("Stripe webhook secret is not set");
     return NextResponse.json(
-      {
-        error: "Stripe webhook secret is not set",
-      },
+      { error: "Stripe webhook secret is not set" },
       { status: 400 }
     );
   }
+
   let event: Stripe.Event;
   try {
     event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
   } catch (error) {
-    console.error("Webhook signature verification failed:", error);
     return NextResponse.json(
-      {
-        error: `Webhook Error: ${error}`,
-      },
+      { error: `Webhook Error: ${error}` },
       { status: 400 }
     );
   }
@@ -48,15 +84,13 @@ export async function POST(req: NextRequest) {
     try {
       await createOrderInSanity(session, invoice);
     } catch (error) {
-      console.error("Error creating order in sanity:", error);
       return NextResponse.json(
-        {
-          error: `Error creating order: ${error}`,
-        },
-        { status: 400 }
+        { error: `Error creating order: ${error}` },
+        { status: 500 }
       );
     }
   }
+
   return NextResponse.json({ received: true });
 }
 
@@ -64,30 +98,18 @@ async function createOrderInSanity(
   session: Stripe.Checkout.Session,
   invoice: Stripe.Invoice | null
 ) {
-  console.error("\n=== CREATING ORDER IN SANITY ===");
-  console.error("Session ID:", session.id);
-  console.error("Metadata:", session.metadata);
-  
   const {
     id,
     amount_total,
     currency,
     metadata,
     payment_intent,
-    customer,
     total_details,
+    customer,
   } = session;
-
-  // Vérifier les métadonnées
-  if (!metadata || !metadata.orderNumber) {
-    console.error("❌ Missing metadata! Session metadata:", metadata);
-    throw new Error("Missing required metadata in checkout session");
-  }
-
+  
   const { orderNumber, customerName, customerEmail, clerkUserId, address } =
     metadata as unknown as Metadata & { address: string };
-  
-  console.error("Order details:", { orderNumber, customerName, customerEmail });
   
   const parsedAddress = address ? JSON.parse(address) : null;
 
@@ -96,19 +118,15 @@ async function createOrderInSanity(
     { expand: ["data.price.product"] }
   );
 
-  console.error("Line items count:", lineItemsWithProduct.data.length);
-
   // Create Sanity product references and prepare stock updates
-  const sanityProducts = [];
-  const stockUpdates = [];
+  const sanityProducts: OrderData["products"] = [];
+  const stockUpdates: { productId: string; quantity: number }[] = [];
+  
   for (const item of lineItemsWithProduct.data) {
     const productId = (item.price?.product as Stripe.Product)?.metadata?.id;
     const quantity = item?.quantity || 0;
 
-    console.error("Processing product:", { productId, quantity });
-
     if (!productId) {
-      console.error("⚠️ Skipping item without product ID");
       continue;
     }
 
@@ -123,18 +141,19 @@ async function createOrderInSanity(
     stockUpdates.push({ productId, quantity });
   }
 
-  console.error("Creating order with", sanityProducts.length, "products");
+  // Récupérer le customer ID Stripe
+  const customerId = typeof customer === 'string' ? customer : customer?.id || customerEmail;
 
-  const order = await backendClient.create({
+  // Créer l'objet order avec les champs requis
+  const orderData: OrderData = {
     _type: "order",
     orderNumber,
     stripeCheckoutSessionId: id,
     stripePaymentIntentId: payment_intent as string,
     customerName,
-    stripeCustomerId: customer as string,
-    clerkUserId: clerkUserId,
+    stripeCustomerId: customerId,
     email: customerEmail,
-    currency,
+    currency: currency?.toUpperCase() || "USD",
     amountDiscount: total_details?.amount_discount
       ? total_details.amount_discount / 100
       : 0,
@@ -142,28 +161,43 @@ async function createOrderInSanity(
     totalPrice: amount_total ? amount_total / 100 : 0,
     status: "paid",
     orderDate: new Date().toISOString(),
-    invoice: invoice
-      ? {
-          id: invoice.id,
-          number: invoice.number,
-          hosted_invoice_url: invoice.hosted_invoice_url,
-        }
-      : null,
-    address: parsedAddress
-      ? {
-          state: parsedAddress.state,
-          zip: parsedAddress.zip,
-          city: parsedAddress.city,
-          address: parsedAddress.address,
-          name: parsedAddress.name,
-        }
-      : null,
-  });
+  };
 
-  console.error("✅ Order created successfully! ID:", order._id);
+  // ✅ Ajouter clerkUserId seulement s'il existe
+  if (clerkUserId) {
+    orderData.clerkUserId = clerkUserId;
+  }
 
-  await updateStockLevels(stockUpdates);
-  return order;
+  // Ajouter l'invoice si elle existe
+  if (invoice) {
+    orderData.invoice = {
+      id: invoice.id,
+      number: invoice.number ?? null,
+      hosted_invoice_url: invoice.hosted_invoice_url ?? null,
+    };
+  }
+
+  // Ajouter l'adresse si elle existe
+  if (parsedAddress) {
+    orderData.address = {
+      state: parsedAddress.state || "",
+      zip: parsedAddress.zip || "",
+      city: parsedAddress.city || "",
+      address: parsedAddress.address || "",
+      name: parsedAddress.name || "",
+    };
+  }
+  
+  try {
+    const order = await backendClient.create(orderData);
+
+    // Update stock levels in Sanity
+    await updateStockLevels(stockUpdates);
+
+    return order;
+  } catch (createError) {
+    throw createError;
+  }
 }
 
 // Function to update stock levels
@@ -176,18 +210,15 @@ async function updateStockLevels(
       const product = await backendClient.getDocument(productId);
 
       if (!product || typeof product.stock !== "number") {
-        console.warn(
-          `Product with ID ${productId} not found or stock is invalid.`
-        );
         continue;
       }
 
-      const newStock = Math.max(product.stock - quantity, 0); // Ensure stock does not go negative
+      const newStock = Math.max(product.stock - quantity, 0);
 
       // Update stock in Sanity
       await backendClient.patch(productId).set({ stock: newStock }).commit();
-    } catch (error) {
-      console.error(`Failed to update stock for product ${productId}:`, error);
+    } catch {
+      // Silent fail for stock updates
     }
   }
 }

@@ -232,7 +232,7 @@ const CartPage = () => {
                           />
                         </div>
                         <Button
-                          className="w-full rounded-full font-semibold tracking-wide hoverEffect"
+                          className="w-full rounded-full font-semibold tracking-wide bg-shop-btn-dark-green/80 hover:bg-shop-btn-dark-green hoverEffect"
                           size="lg"
                           disabled={loading}
                           onClick={handleCheckout}

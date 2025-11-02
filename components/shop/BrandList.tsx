@@ -28,7 +28,7 @@ const BrandList = ({ brands, selectedBrand, setSelectedBrand }: Props) => {
             />
             <Label
               htmlFor={brand?.slug?.current}
-              className={`${selectedBrand === brand?.slug?.current ? "font-semibold text-shop_dark_green" : "font-normal"}`}
+              className={`${selectedBrand === brand?.slug?.current ? "font-semibold text-shop-dark-green" : "font-normal"}`}
             >
               {brand?.title}
             </Label>
@@ -37,7 +37,7 @@ const BrandList = ({ brands, selectedBrand, setSelectedBrand }: Props) => {
         {selectedBrand && (
           <button
             onClick={() => setSelectedBrand(null)}
-            className="text-sm font-medium mt-2 underline underline-offset-2 decoration-1 hover:text-shop_dark_green hoverEffect text-left"
+            className="text-sm font-medium mt-2 underline underline-offset-2 decoration-1 hover:text-shop-dark-green hoverEffect text-left"
           >
             Reset selection
           </button>

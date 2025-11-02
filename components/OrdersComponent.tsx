@@ -81,7 +81,7 @@ const OrdersComponent = ({ orders }: { orders: MY_ORDERS_QUERYResult }) => {
                   >
                     <X
                       size={20}
-                      className="group-hover:text-shop_dark_green hoverEffect"
+                      className="group-hover:text-shop-dark-green hoverEffect"
                     />
                   </TableCell>
                 </TableRow>

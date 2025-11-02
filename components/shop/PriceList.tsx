@@ -33,7 +33,7 @@ const PriceList = ({ selectedPrice, setSelectedPrice }: Props) => {
             />
             <Label
               htmlFor={price.value}
-              className={`${selectedPrice === price?.value ? "font-semibold text-shop_dark_green" : "font-normal"}`}
+              className={`${selectedPrice === price?.value ? "font-semibold text-shop-dark-green" : "font-normal"}`}
             >
               {price?.title}
             </Label>
@@ -43,7 +43,7 @@ const PriceList = ({ selectedPrice, setSelectedPrice }: Props) => {
       {selectedPrice && (
         <button
           onClick={() => setSelectedPrice(null)}
-          className="text-sm font-medium mt-2 underline underline-offset-2 decoration-1 hover:text-shop_dark_green hoverEffect"
+          className="text-sm font-medium mt-2 underline underline-offset-2 decoration-1 hover:text-shop-dark-green hoverEffect"
         >
           Reset selection
         </button>

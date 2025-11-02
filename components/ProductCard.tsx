@@ -46,9 +46,9 @@ const ProductCard = ({ product }: { product: Product }) => {
         )}
       </div>
       <div className="p-3 flex flex-col gap-2">
-        {product?.categories && (
+        {product?.variant && (
           <p className="uppercase line-clamp-1 text-xs font-medium text-lightText">
-            {product.categories.map((cat) => cat).join(", ")}
+            {product.variant}
           </p>
         )}
         <Title className="text-sm line-clamp-1">{product?.name}</Title>
