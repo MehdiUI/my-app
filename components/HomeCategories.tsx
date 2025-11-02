@@ -5,7 +5,12 @@ import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import Link from "next/link";
 
-const HomeCategories = ({ categories }: { categories: Category[] }) => {
+// Étendre le type Category pour inclure productCount
+interface CategoryWithCount extends Category {
+  productCount?: number;
+}
+
+const HomeCategories = ({ categories }: { categories: CategoryWithCount[] }) => {
   return (
     <div className="bg-white border border-shop-light-green/20 my-10 md:my-20 p-5 lg:p-7 rounded-md">
       <Title className="border-b pb-3">Popular Categories</Title>
@@ -31,9 +36,8 @@ const HomeCategories = ({ categories }: { categories: Category[] }) => {
             <div className="space-y-1">
               <h3 className="text-base font-semibold">{category?.title}</h3>
               <p className="text-sm">
-                {/* Utilisez une propriété existante ou supprimez cette ligne */}
                 <span className="font-bold text-shop-dark-green">
-                  {category?.range ? `Range: ${category.range}` : "Available"}
+                  {category?.productCount || 0} products
                 </span>
               </p>
             </div>
