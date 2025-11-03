@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
-// IMPORTANT: Configuration pour Next.js 16
+
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic'
 
@@ -98,6 +98,7 @@ async function createOrderInSanity(
   session: Stripe.Checkout.Session,
   invoice: Stripe.Invoice | null
 ) {
+  
   const {
     id,
     amount_total,
