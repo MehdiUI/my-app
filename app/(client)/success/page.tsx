@@ -8,6 +8,7 @@ import { Check, Home, Package, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
 const SuccessPageContent = () => {
   const { resetCart } = useStore();
