@@ -1,5 +1,5 @@
 import stripe from "@/lib/stripe";
-import { backendClient } from "@/sanity/lib/client"; 
+import { backendClient } from "@/sanity/lib/backendClient"; 
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
@@ -141,7 +141,7 @@ async function createOrderInSanity(session: Stripe.Checkout.Session) {
   
   for (const item of lineItems.data) {
     const product = item.price?.product as Stripe.Product;
-    const productId = product?.metadata?.sanityId || product?.metadata?.id;
+const productId = product?.metadata?.id;
     const quantity = item.quantity || 0;
 
     if (!productId) {
