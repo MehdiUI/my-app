@@ -11,7 +11,7 @@ interface OrderData {
   _type: string;
   orderNumber: string;
   stripeCheckoutSessionId: string;
-  stripePaymentIntentId: string; // ← AJOUT DE CETTE PROPRIÉTÉ MANQUANTE
+  stripePaymentIntentId: string;
   customerName: string;
   stripeCustomerId: string;
   email: string;
@@ -29,6 +29,15 @@ interface OrderData {
   status: string;
   orderDate: string;
   clerkUserId?: string;
+  invoice?: { 
+    id: string;
+    number: string | null;
+    hosted_invoice_url: string | null;
+    status?: string;
+    amount_paid?: number;
+    amount_due?: number;
+    created?: string;
+  };
   address?: {
     state: string;
     zip: string;
