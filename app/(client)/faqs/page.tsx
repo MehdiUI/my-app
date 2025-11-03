@@ -3,28 +3,28 @@ import Title from "@/components/Title";
 
 const faqs = [
   {
-    question: "Quels sont les délais de livraison ?",
-    answer: "Nos délais de livraison standard sont de 2 à 5 jours ouvrés. Les livraisons express sont disponibles en 24h pour une majorité de destinations."
+    question: "What are your delivery times?",
+    answer: "Our standard delivery times are 2-5 business days. Express delivery is available within 24 hours for most destinations."
   },
   {
-    question: "Quels modes de paiement acceptez-vous ?",
-    answer: "Nous acceptons les cartes de crédit (Visa, MasterCard, American Express), PayPal, et virements bancaires."
+    question: "What payment methods do you accept?",
+    answer: "We accept credit cards (Visa, MasterCard, American Express), PayPal, and bank transfers."
   },
   {
-    question: "Puis-je modifier ma commande après l'avoir passée ?",
-    answer: "Vous pouvez modifier votre commande dans l'heure qui suit la validation. Passé ce délai, veuillez nous contacter au plus vite."
+    question: "Can I modify my order after placing it?",
+    answer: "You can modify your order within one hour of confirmation. After this period, please contact us as soon as possible."
   },
   {
-    question: "Quelle est votre politique de retour ?",
-    answer: "Nous acceptons les retours sous 30 jours pour tout article non utilisé, dans son emballage d'origine. Les frais de retour sont à votre charge."
+    question: "What is your return policy?",
+    answer: "We accept returns within 30 days for any unused item in its original packaging. Return shipping costs are your responsibility."
   },
   {
-    question: "Proposez-vous la livraison internationale ?",
-    answer: "Oui, nous livrons dans la plupart des pays. Les frais et délais de livraison varient selon la destination."
+    question: "Do you offer international shipping?",
+    answer: "Yes, we ship to most countries. Shipping fees and delivery times vary by destination."
   },
   {
-    question: "Comment suivre ma commande ?",
-    answer: "Un email de confirmation avec un numéro de suivi vous sera envoyé dès l'expédition de votre colis."
+    question: "How can I track my order?",
+    answer: "A confirmation email with a tracking number will be sent to you as soon as your package is shipped."
   }
 ];
 
@@ -32,7 +32,7 @@ export default function FAQPage() {
   return (
     <div className="py-10">
       <Container>
-        <Title>Foire Aux Questions</Title>
+        <Title>Frequently Asked Questions</Title>
         <div className="max-w-4xl mx-auto mt-8 space-y-6">
           {faqs.map((faq, index) => (
             <div key={index} className="border-b border-gray-200 pb-6">
